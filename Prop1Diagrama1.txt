@@ -1,0 +1,29 @@
+@startuml
+title Propuesta 1. Diagrama 1
+actor Cliente
+
+boundary Interfaz_pedido
+control Controlador_pedido
+entity Entidad_pedido
+control Controlador_producto
+entity Entidad_producto
+
+Cliente->Interfaz_pedido : realizarPedido
+Interfaz_pedido->Controlador_pedido : iniciarPedido
+Controlador_pedido->Controlador_producto : listarProductos
+Controlador_producto->Entidad_producto : recuperarProductos
+Entidad_producto-->Controlador_producto : listaProductos
+Controlador_producto-->Controlador_pedido : listaProductos
+Controlador_pedido -> Interfaz_pedido : mostrarProductos
+Cliente -> Interfaz_pedido : introducirDirección
+Cliente -> Interfaz_pedido : seleccionarProducto
+Interfaz_pedido -> Controlador_producto : recuperarDatosProducto
+Controlador_producto -> Entidad_producto : recuperaDatos
+Entidad_producto --> Controlador_producto : datosProducto
+Controlador_producto -> Interfaz_pedido : mostrarDatosProducto
+Cliente -> Interfaz_pedido : confirmarSelección
+Interfaz_pedido -> Controlador_pedido : confirmarPedido
+Controlador_pedido -> Entidad_pedido : registrarPedido
+Entidad_pedido --> Controlador_pedido : IDPedido
+Controlador_pedido -> Interfaz_pedido : muestraID
+@enduml

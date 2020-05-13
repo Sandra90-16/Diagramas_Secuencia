@@ -1,0 +1,55 @@
+@startuml
+title Propuesta 2
+actor Cliente
+
+boundary Interfaz_pago
+control Controlador_pedido
+entity Entidad_pedido
+control Controlador_pago
+entity Entidad_pago
+boundary Interfaz_banco
+actor Sistema_gestion_pagos
+boundary Pago_efectivo
+
+Cliente->Interfaz_pago : realizarPago
+Interfaz_pago->Controlador_pedido : listaPedidos
+Controlador_pedido->Entidad_pedido : recuperaPedidos
+
+loop
+Cliente-> Interfaz_pago: seleccionarPedido
+Entidad_pedido --> Controlador_pedido : pedidos
+Controlador_pedido-->Interfaz_pago : mostrarPedidos
+Interfaz_pago -> Controlador_pedido : recuperarPedido
+Controlador_pedido -> Entidad_pedido : recuperarDatosPedido
+Entidad_pedido --> Controlador_pedido : datosPedido
+Controlador_pedido -> Interfaz_pago : mostrarDatosPedido
+Cliente -> Interfaz_pago : confirmarPedido
+end
+
+Interfaz_pago -> Controlador_pedido : solicitarPago
+Controlador_pedido -> Controlador_pago : pagoPedido
+Controlador_pago -> Interfaz_pago : solicitarFormaPago
+Cliente -> Interfaz_pago : seleccionarFormaPago
+
+alt
+Controlador_pago -> Cliente : Tarjeta o Efectivo?
+
+alt pagoTarjeta
+Cliente -> Interfaz_pago : introducirDatos
+Interfaz_pago -> Controlador_pago : confirmaDatos
+Controlador_pago -> Interfaz_banco : confirmarDatosBancarios
+Interfaz_banco -> Sistema_gestion_pagos : confirmaDatos
+Sistema_gestion_pagos --> Interfaz_banco : datosCorrectos
+Interfaz_banco -> Controlador_pago : pagoPedido
+Controlador_pago -> Interfaz_banco : realizarPago
+
+
+else pagoEfectivo
+Controlador_pago -> Entidad_pago : registrarPago
+Entidad_pago -> Interfaz_pago : confirmarPagoCuandoPedidoRecibido
+
+end
+
+Cliente -> Controlador_pedido : confirmarPedido
+Controlador_pedido --> Cliente : IDPedido
+@enduml

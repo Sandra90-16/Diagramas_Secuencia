@@ -1,0 +1,35 @@
+@startuml
+Title Propuesta 1. Diagrama 2
+Actor Cliente
+Pedido -> Producto
+Cliente -> Pedido : iniciarPedido
+Cliente -> Pedido : introducirDirección
+Pedido -> Producto : recuperarProductos
+Producto --> Pedido : listaProductos
+
+loop
+Cliente -> Pedido : seleccionarProducto
+
+   
+else 
+
+    Pedido -> Producto : recuperarDatosProducto
+    Producto --> Pedido : datosProducto
+    loop
+    Pedido -> Producto : LineaPedido
+        loop  
+            Pedido --> Producto: crear
+            Pedido -> Producto : asociarDatosProducto
+            Cliente -> Pedido : confirmarSeleccion
+            Pedido -> Producto : registrarPedido
+
+        end
+    end
+
+
+else 
+
+end
+Cliente -> Pedido : confirmarPedido
+Pedido --> Cliente : IDPedido
+@enduml
